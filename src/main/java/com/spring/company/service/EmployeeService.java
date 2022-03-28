@@ -40,4 +40,14 @@ public class EmployeeService {
         return employees;
     }
 
+    public Employee updateEmployee(Employee employee, UUID uuid) {
+        return employees.stream().filter(e -> e.getUuid().equals(uuid)).map(e -> {
+            e.setFirstName(employee.getFirstName());
+            e.setLastName(employee.getLastName());
+            e.setDateOfBirth(employee.getDateOfBirth());
+            e.setRole(employee.getRole());
+            return e;
+        }).findFirst().get();
+    }
+
 }
