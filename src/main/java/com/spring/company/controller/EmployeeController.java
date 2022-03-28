@@ -41,4 +41,10 @@ public class EmployeeController {
     public ResponseEntity<Employee> partiallyUpdateEmployee(@RequestBody Employee employee, @PathVariable String id) {
         return ResponseEntity.ok(employeeService.partiallyUpdateEmployee(employee, UUID.fromString(id)));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable String id) {
+        employeeService.deleteEmployee(UUID.fromString(id));
+        return ResponseEntity.ok("Employee deleted!");
+    }
 }

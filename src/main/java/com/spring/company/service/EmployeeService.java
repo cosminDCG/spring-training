@@ -71,4 +71,8 @@ public class EmployeeService {
         }).findFirst().get();
     }
 
+    public void deleteEmployee(UUID uuid) {
+        employees.removeIf(e -> e.getUuid().equals(uuid));
+    }
+
 }
