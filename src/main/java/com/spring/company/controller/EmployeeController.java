@@ -27,6 +27,11 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployeeByUuid(UUID.fromString(id)));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Employee>> filterEmployees(@RequestParam String criteria) {
+        return ResponseEntity.ok(employeeService.filterEmployees(criteria));
+    }
+
     @PostMapping
     public ResponseEntity<List<Employee>> addEmployee(@RequestBody Employee employee) {
         return ResponseEntity.ok(employeeService.addEmployee(employee));

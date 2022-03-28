@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -73,6 +75,12 @@ public class EmployeeService {
 
     public void deleteEmployee(UUID uuid) {
         employees.removeIf(e -> e.getUuid().equals(uuid));
+    }
+
+    public List<Employee> filterEmployees(String criteria) {
+        return employees.stream().filter(e ->
+                e.getFirstName().toLowerCase(Locale.ROOT).contains(criteria) ||
+                        e.getLastName().toLowerCase(Locale.ROOT).contains(criteria)).collect(Collectors.toList());
     }
 
 }
