@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeService {
 
-    private List<Employee> employees = new ArrayList<>();
+    public static List<Employee> employees = new ArrayList<>();
 
     public EmployeeService() {
         employees.add(new Employee(UUID.randomUUID(), "Ion", "Popescu", null, EmployeeRole.MEMBER));
