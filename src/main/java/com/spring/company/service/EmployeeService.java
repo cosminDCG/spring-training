@@ -50,4 +50,25 @@ public class EmployeeService {
         }).findFirst().get();
     }
 
+    public Employee partiallyUpdateEmployee(Employee employee, UUID uuid) {
+        return employees.stream().filter(e -> e.getUuid().equals(uuid)).map(e -> {
+            if (employee.getFirstName() != null) {
+                e.setFirstName(employee.getFirstName());
+            }
+
+            if (employee.getLastName() != null) {
+                e.setLastName(employee.getLastName());
+            }
+
+            if (employee.getDateOfBirth() != null) {
+                e.setDateOfBirth(employee.getDateOfBirth());
+            }
+
+            if (employee.getRole() != null) {
+                e.setRole(employee.getRole());
+            }
+            return e;
+        }).findFirst().get();
+    }
+
 }
