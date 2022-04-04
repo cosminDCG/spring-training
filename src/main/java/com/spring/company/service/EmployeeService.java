@@ -2,6 +2,8 @@ package com.spring.company.service;
 
 import com.spring.company.model.Employee;
 import com.spring.company.model.EmployeeRole;
+import com.spring.company.repository.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +15,9 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeService {
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     public static List<Employee> employees = new ArrayList<>();
 
     public EmployeeService() {
@@ -22,7 +27,7 @@ public class EmployeeService {
     }
 
     public List<Employee> getAllEmployees() {
-        return employees;
+        return employeeRepository.getAllEmployees();
     }
 
     public Employee getEmployeeByUuid(UUID uuid) {
@@ -36,10 +41,10 @@ public class EmployeeService {
         return employees.stream().filter(e -> e.getUuid().equals(uuid)).findFirst().get();
     }
 
-    public List<Employee> addEmployee(Employee employee) {
+    public Employee addEmployee(Employee employee) {
         employee.setUuid(UUID.randomUUID());
-        employees.add(employee);
-        return employees;
+        employeeRepository.createEmployee(employee);
+        return employee;
     }
 
     public Employee updateEmployee(Employee employee, UUID uuid) {

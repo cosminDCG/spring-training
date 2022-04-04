@@ -33,7 +33,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<List<Employee>> addEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
         return ResponseEntity.ok(employeeService.addEmployee(employee));
     }
 
