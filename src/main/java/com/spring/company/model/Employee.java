@@ -1,5 +1,6 @@
 package com.spring.company.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -24,16 +25,21 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private EmployeeRole role;
 
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    @JsonBackReference
+    private Project project;
 
     public Employee() {
     }
 
-    public Employee(UUID uuid, String firstName, String lastName, Date dateOfBirth, EmployeeRole role) {
+    public Employee(UUID uuid, String firstName, String lastName, Date dateOfBirth, EmployeeRole role, Project project) {
         this.uuid = uuid;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.role = role;
+        this.project = project;
     }
 
     public UUID getUuid() {
@@ -74,6 +80,14 @@ public class Employee {
 
     public void setRole(EmployeeRole role) {
         this.role = role;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Override

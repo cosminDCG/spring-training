@@ -1,16 +1,13 @@
 package com.spring.company.service;
 
 import com.spring.company.model.Employee;
-import com.spring.company.model.EmployeeRole;
 import com.spring.company.repository.EmployeeRepository;
+import com.spring.company.repository.EmployeeRepositoryCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -18,16 +15,11 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public static List<Employee> employees = new ArrayList<>();
-
-    public EmployeeService() {
-        employees.add(new Employee(UUID.randomUUID(), "Ion", "Popescu", null, EmployeeRole.MEMBER));
-        employees.add(new Employee(UUID.randomUUID(), "Cristi", "Ionescu", null, EmployeeRole.MEMBER));
-        employees.add(new Employee(UUID.randomUUID(), "Vasile", "Popa", null, EmployeeRole.LEAD));
-    }
+    @Autowired
+    private EmployeeRepositoryCRUD employeeRepositoryCRUD;
 
     public List<Employee> getAllEmployees() {
-        return employeeRepository.getAllEmployees();
+        return employeeRepositoryCRUD.findAll();
     }
 
     public Employee getEmployeeByUuid(UUID uuid) {
@@ -38,45 +30,50 @@ public class EmployeeService {
                 }
             }
          */
-        return employeeRepository.getEmployeeByUuid(uuid);
+        return employeeRepositoryCRUD.findById(uuid).get();
     }
 
     public Employee addEmployee(Employee employee) {
         employee.setUuid(UUID.randomUUID());
-        employeeRepository.createEmployee(employee);
-        return employee;
+        return employeeRepositoryCRUD.save(employee);
     }
 
     public Employee updateEmployee(Employee employee, UUID uuid) {
-        employeeRepository.updateEmployee(employee, uuid);
-        return employee;
+        employee.setUuid(uuid);
+        return employeeRepositoryCRUD.save(employee);
     }
 
     public Employee partiallyUpdateEmployee(Employee employee, UUID uuid) {
+        Employee oldEmployee = employeeRepositoryCRUD.findById(uuid).get();
         if (employee.getFirstName() != null) {
-            employeeRepository.updateFirstName(employee.getFirstName(), uuid);
+            oldEmployee.setFirstName(employee.getFirstName());
         }
 
         if (employee.getLastName() != null) {
-           employeeRepository.updateLastName(employee.getLastName(), uuid);
+            oldEmployee.setLastName(employee.getLastName());
         }
 
         if (employee.getDateOfBirth() != null) {
-            employeeRepository.updateDateOfBirth(employee.getDateOfBirth(), uuid);
+            oldEmployee.setDateOfBirth(employee.getDateOfBirth());
         }
 
         if (employee.getRole() != null) {
-            employeeRepository.updateRole(employee.getRole(), uuid);
+            oldEmployee.setRole(employee.getRole());
         }
-        return employeeRepository.getEmployeeByUuid(uuid);
+
+        if (employee.getProject() != null) {
+            oldEmployee.setProject(employee.getProject());
+        }
+        return employeeRepositoryCRUD.save(oldEmployee);
     }
 
     public void deleteEmployee(UUID uuid) {
-        employeeRepository.deleteEmployee(uuid);
+        Employee employee = employeeRepositoryCRUD.findById(uuid).get();
+        employeeRepositoryCRUD.delete(employee);
     }
 
     public List<Employee> filterEmployees(String criteria) {
-        return employeeRepository.filterEmployees(criteria);
+        return employeeRepositoryCRUD.findEmployeeByFirstNameContainingOrLastNameContaining(criteria, criteria);
     }
 
 }
