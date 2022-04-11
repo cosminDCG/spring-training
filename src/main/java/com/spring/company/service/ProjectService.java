@@ -2,22 +2,30 @@ package com.spring.company.service;
 
 import com.spring.company.model.Employee;
 import com.spring.company.model.Project;
+import com.spring.company.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class ProjectService {
 
-    private List<Project> projects;
+    @Autowired
+    ProjectRepository projectRepository;
 
-    public ProjectService() {
-        projects.add(new Project(UUID.randomUUID(), "Vacation platform", "Vacation platform for internals", EmployeeService.employees));
-        List<Employee> vetEmployee = new ArrayList<>();
-        vetEmployee.add(EmployeeService.employees.get(0));
-        vetEmployee.add(EmployeeService.employees.get(1));
-        projects.add(new Project(UUID.randomUUID(), "Vet App", "App for vet medicine", vetEmployee));
-        projects.add(new Project(UUID.randomUUID(), "Social App", "FB alike application", EmployeeService.employees));
+    public Project createProject(Project project) {
+        project.setUuid(UUID.randomUUID());
+        return projectRepository.save(project);
+    }
+
+    public List<Project> getAllProjects() {
+        return projectRepository.findAll();
+    }
+
+    public Project getProjectByUuid(UUID uuid) {
+        return projectRepository.getById(uuid);
     }
 }

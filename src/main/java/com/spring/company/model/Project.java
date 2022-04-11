@@ -1,16 +1,26 @@
 package com.spring.company.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.ManyToAny;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
 public class Project {
 
+    @Id
+    @Type(type="uuid-char")
     private UUID uuid;
 
     private String name;
 
     private String description;
 
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Employee> employees;
 
     public Project() {
