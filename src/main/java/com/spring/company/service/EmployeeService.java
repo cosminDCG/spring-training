@@ -4,6 +4,7 @@ import com.spring.company.model.Employee;
 import com.spring.company.repository.EmployeeRepository;
 import com.spring.company.repository.EmployeeRepositoryCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepositoryCRUD employeeRepositoryCRUD;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public List<Employee> getAllEmployees() {
         return employeeRepositoryCRUD.findAll();
@@ -35,6 +39,7 @@ public class EmployeeService {
 
     public Employee addEmployee(Employee employee) {
         employee.setUuid(UUID.randomUUID());
+        employee.setPassword(bCryptPasswordEncoder.encode(employee.getPassword()));
         return employeeRepositoryCRUD.save(employee);
     }
 
@@ -74,6 +79,10 @@ public class EmployeeService {
 
     public List<Employee> filterEmployees(String criteria) {
         return employeeRepositoryCRUD.findEmployeeByFirstNameContainingOrLastNameContaining(criteria, criteria);
+    }
+
+    public Employee getByEmail(String email) {
+        return employeeRepositoryCRUD.findByEmail(email).orElse(null);
     }
 
 }

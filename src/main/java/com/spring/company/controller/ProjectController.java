@@ -1,12 +1,14 @@
 package com.spring.company.controller;
 
-import com.spring.company.model.Employee;
+import com.spring.company.model.EmployeeRole;
 import com.spring.company.model.Project;
 import com.spring.company.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.UUID;
 

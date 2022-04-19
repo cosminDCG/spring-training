@@ -5,11 +5,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface EmployeeRepositoryCRUD extends CrudRepository<Employee, UUID> {
 
     List<Employee> findAll();
+
+    Optional<Employee> findByEmail(String email);
 
     List<Employee> findEmployeeByFirstNameContainingOrLastNameContaining(String criteria1, String criteria2);
 

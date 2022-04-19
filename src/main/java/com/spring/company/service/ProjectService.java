@@ -3,6 +3,7 @@ package com.spring.company.service;
 import com.spring.company.model.Project;
 import com.spring.company.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Project createProject(Project project) {
         project.setUuid(UUID.randomUUID());
         return projectRepository.save(project);

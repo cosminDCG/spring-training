@@ -1,5 +1,7 @@
 package com.spring.company.controller;
 
+import com.spring.company.dto.EmployeeDto;
+import com.spring.company.mapper.EmployeeMapper;
 import com.spring.company.model.Employee;
 import com.spring.company.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +10,25 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/employee")
 public class EmployeeController {
 
-    @Autowired
     private EmployeeService employeeService;
+    private EmployeeMapper employeeMapper;
+
+    @Autowired
+    public EmployeeController(EmployeeService employeeService, EmployeeMapper employeeMapper) {
+        this.employeeService = employeeService;
+        this.employeeMapper = employeeMapper;
+    }
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees() {
-        return ResponseEntity.ok(employeeService.getAllEmployees());
+    public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
+        List<Employee> employees = employeeService.getAllEmployees();
+        return ResponseEntity.ok(employees.stream().map(employeeMapper::mapToDto).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
@@ -32,8 +42,9 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
-        return ResponseEntity.ok(employeeService.addEmployee(employee));
+    public ResponseEntity<EmployeeDto> addEmployee(@RequestBody EmployeeDto employeeDto) {
+        Employee employee = employeeMapper.mapToEntity(employeeDto);
+        return ResponseEntity.ok(employeeMapper.mapToDto(employeeService.addEmployee(employee)));
     }
 
     @PutMapping("/{id}")
